@@ -78,6 +78,9 @@ void DS2450::update() {
             }
         } else {
             // conversion taking too long
+#ifdef DEBUG
+            Serial.println("Conversation taking too long");
+#endif
             return;
         }
     }
@@ -101,6 +104,14 @@ void DS2450::update() {
     uint8_t *crcBytes = (uint8_t *)&crc;
     uint8_t crcLo = ~data[11];
     uint8_t crcHi = ~data[12];
+
+#ifdef DEBUG
+    for (int i = 0; i < 13; i++) {
+        Serial.print(data[i], HEX);
+    }
+    Serial.println();
+#endif
+
     _error = !(crcBytes[0] == crcLo && crcBytes[1] == crcHi);
 }
 
